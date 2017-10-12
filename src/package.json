@@ -1,6 +1,6 @@
 {
   "name": "ngx-growl",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/dbfannin/ngx-growl"
@@ -16,7 +16,9 @@
   "bugs": {
     "url": "https://github.com/dbfannin/ngx-growl/issues"
   },
+  "main": "ngx-growl.umd.js",
   "module": "ngx-growl.js",
+  "jsnext:main": "ngx-growl.js",
   "typings": "ngx-growl.d.ts",
   "peerDependencies": {
     "@angular/core": "^4.0.0",

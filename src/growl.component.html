@@ -1,0 +1,5 @@
+<div class="message-container {{item.type.toLowerCase()}}" *ngFor="let item of growlItems; let idx = index;" [ngClass]="{closing: item.closing}">
+  <span class="close" (click)="close(idx)">×</span>
+  <strong class="heading">{{item.heading}}</strong>
+  <span class="message">{{item.message}}</span>
+</div>

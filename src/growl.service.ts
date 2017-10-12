@@ -1,10 +1,12 @@
 import {Injectable, EventEmitter} from '@angular/core';
-import {NGXLogger} from 'ngx-logger'
+
+export type InputMessage = Message | string | Message[] | string[];
+
 
 export interface GrowlItem {
   heading?: string;
   message?: string;
-  type: 'ERROR'|'WARN'|'INFO'|'SUCCESS';
+  type: 'ERROR' | 'WARN' | 'INFO' | 'SUCCESS';
   id: number;
 }
 
@@ -27,9 +29,7 @@ export class GrowlService {
     return typeof msg === 'string' ? {message: msg} : msg;
   }
 
-  private addMessage(msg: Message | string, type: 'ERROR'|'WARN'|'INFO'|'SUCCESS') {
-    if (!msg) return;
-
+  private message(msg: Message | string, type: 'ERROR' | 'WARN' | 'INFO' | 'SUCCESS') {
     msg = GrowlService._createMessage(msg);
 
     //need id to know that the right one is being removed
@@ -46,20 +46,30 @@ export class GrowlService {
     }, this.timeout)
   }
 
+  private addMessage(msg: InputMessage, type: 'ERROR' | 'WARN' | 'INFO' | 'SUCCESS') {
+    if (!msg) return;
 
-  addError(msg: Message | string) {
+    const arrayMsg: Message[] | string[] = msg instanceof Array ? msg : [msg];
+
+    arrayMsg.forEach((item) => {
+      this.message(item, type);
+    })
+  }
+
+
+  addError(msg: InputMessage) {
     this.addMessage(msg, 'ERROR');
   }
 
-  addWarn(msg: Message | string) {
+  addWarn(msg: InputMessage) {
     this.addMessage(msg, 'WARN');
   }
 
-  addInfo(msg: Message | string) {
+  addInfo(msg: InputMessage) {
     this.addMessage(msg, 'INFO');
   }
 
-  addSuccess(msg: Message | string) {
+  addSuccess(msg: InputMessage) {
     this.addMessage(msg, 'SUCCESS');
   }
 
