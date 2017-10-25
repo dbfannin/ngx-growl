@@ -22,15 +22,19 @@ The only remaining part is to list the imported module in your application modul
 ```js
 @NgModule({
   declarations: [AppComponent, ...],
-  imports: [GrowlModule.forRoot({...}), ...],
+  imports: [GrowlModule.forRoot({maxMessages: 10, displayTimeMs: 5000}), ...],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 }
 ```
 
-## Usage
+## Config Options
+ * maxMessages - The maximum number of messages allowed to be displayed at a time
+ * displayTimeMs - The time a message will display before being automatically hidden in milliseconds
 
+
+## Usage
 To use NGX Growl, you will need to add it to your an application html file
 
 ```angular2html
