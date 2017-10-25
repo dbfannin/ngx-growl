@@ -1,4 +1,5 @@
 import {Injectable, EventEmitter} from '@angular/core';
+import {GrowlConfig} from './growl.config';
 
 export type InputMessage = Message | string | Message[] | string[];
 
@@ -18,10 +19,9 @@ export interface Message {
 @Injectable()
 export class GrowlService {
 
-  constructor() {
+  constructor(private config: GrowlConfig) {
   }
 
-  private timeout: number = 5000;
   OnAddMessage: EventEmitter<any> = new EventEmitter();
   OnRemoveMessage: EventEmitter<any> = new EventEmitter();
 
@@ -43,7 +43,7 @@ export class GrowlService {
     this.OnAddMessage.emit(message);
     setTimeout(() => {
       this.OnRemoveMessage.emit(message);
-    }, this.timeout)
+    }, this.config.displayTimeMs)
   }
 
   private addMessage(msg: InputMessage, type: 'ERROR' | 'WARN' | 'INFO' | 'SUCCESS') {

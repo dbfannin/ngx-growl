@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 import {GrowlItem, GrowlService} from './growl.service';
+import {GrowlConfig} from './growl.config';
 
 export interface MyGrowlItem extends GrowlItem {
   closing?: boolean;
@@ -13,11 +14,9 @@ export interface MyGrowlItem extends GrowlItem {
 })
 export class GrowlComponent implements OnInit {
 
-  constructor(private growlService: GrowlService) {
-
+  constructor(private config: GrowlConfig, private growlService: GrowlService) {
     this.growlService.OnAddMessage.subscribe((msg: GrowlItem) => this.onAddMessage(msg));
     this.growlService.OnRemoveMessage.subscribe((msg: GrowlItem) => this.onRemoveMessage(msg));
-
   }
 
   growlItems: MyGrowlItem[] = [];
@@ -25,7 +24,7 @@ export class GrowlComponent implements OnInit {
   ngOnInit() {
   }
 
-  private _remove(msg: MyGrowlItem) {
+  private _remove(msg: MyGrowlItem, done?: () => void) {
     if (!msg || !this.growlItems || !this.growlItems.length) return;
 
     let curMsg;
@@ -37,23 +36,32 @@ export class GrowlComponent implements OnInit {
       }
     }
 
-
     if (!curMsg || curMsg.closing) return;
 
     curMsg.closing = true;
     setTimeout(() => {
       this.growlItems.splice(curMsgIdx, 1);
-    }, 500);
+      if (done) {
+        done();
+      }
+    }, 50);
   }
 
-  close(index: number) {
+  close(index: number, done?: () => void) {
     if (typeof index !== 'number') return;
 
-    this._remove(this.growlItems[index]);
+    this._remove(this.growlItems[index], done);
   }
 
   onAddMessage(msg: GrowlItem) {
-    this.growlItems.push(msg);
+    if (this.growlItems.length && this.config.maxMessages && this.config.maxMessages <= this.growlItems.length) {
+      this.close(this.growlItems.length - 1, () => {
+        this.growlItems.unshift(msg);
+      });
+    } else {
+      this.growlItems.unshift(msg);
+    }
+
   }
 
   onRemoveMessage(msg: MyGrowlItem) {
