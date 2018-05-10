@@ -3,7 +3,7 @@ $yellow: #E7E232;
 $blue: #146587;
 $green: #477529;
 
-@keyframes slideIn {
+@keyframes slidein {
   0% {
     transform: translateX(100%);
   }
@@ -12,7 +12,7 @@ $green: #477529;
   }
 }
 
-@keyframes slideOut {
+@keyframes slideout {
   0% {
     transform: translateX(0);
   }
