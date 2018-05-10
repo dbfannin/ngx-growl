@@ -44,7 +44,7 @@ export class GrowlComponent implements OnInit {
       if (done) {
         done();
       }
-    }, 50);
+    }, 350);
   }
 
   close(index: number, done?: () => void) {
