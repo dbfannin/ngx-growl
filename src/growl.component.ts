@@ -40,7 +40,13 @@ export class GrowlComponent implements OnInit {
 
     curMsg.closing = true;
     setTimeout(() => {
-      this.growlItems.splice(curMsgIdx, 1);
+      // Index need to be updated again.
+      // Because during this timer timeout we can add more messages to begin of array (this.onAddMessage()).
+      // Then index of this elemend will be shifted.
+      curMsgIdx = this.growlItems.findIndex(item => item.id === msg.id);
+      if (curMsgIdx != -1) {
+        this.growlItems.splice(curMsgIdx, 1);
+      }
       if (done) {
         done();
       }
